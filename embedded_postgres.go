@@ -197,7 +197,11 @@ func encodeOptions(port uint32, parameters map[string]string) string {
 	options := []string{fmt.Sprintf("-p %d", port)}
 	for k, v := range parameters {
 		// Single-quote parameter values - they may have spaces.
-		options = append(options, fmt.Sprintf("-c %s='%s'", k, v))
+		if strings.Contains(v, " ") {
+			options = append(options, fmt.Sprintf("-c %s='%s'", k, v))
+		} else {
+			options = append(options, fmt.Sprintf("-c %s=%s", k, v))
+		}
 	}
 	return strings.Join(options, " ")
 }
